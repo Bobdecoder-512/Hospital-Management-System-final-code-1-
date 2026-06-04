@@ -1,0 +1,2 @@
+﻿Patient_id,Patient_type,Patient_reason,Patient_h.record,Patient_h.date,Patient_stay,Patient_doctor,Patient_diagnosis
+P0001,Inpatient,vomit,Admission,12/12/2026,3,D001,high blood pressure

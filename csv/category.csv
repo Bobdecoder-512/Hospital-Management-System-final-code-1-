@@ -1,0 +1,7 @@
+category_id,category_detail,category_price
+S001,General Surgery,300
+S002,Emergency Surgery,500
+R001,Normal ward,100
+R002,VIP ward,300
+R003,ICU,500
+Consult,service,200

@@ -1,0 +1,6 @@
+﻿dr_id,dr_name,dr_gender,dr_emergency,dr_contact,dr_duty,dr_specialism,dr_employment,dr_salary
+D307,Ben Lin,M,1479865231,1024587935,Off,General surgery,Permanent,14452.00
+D928,Bart Lin,M,1047896520,1234568520,On,Radiology,Intern,1453.00
+D170,Barbie Lee,F,1457852145,1458735125,On,Radiology,Contract-bond,10050.20
+D590,John Doe,M,0106290873,0116290888,On,General surgery,Permanent,12300.50
+D539,Vincent Lim,M,0214141541,1231415263,On,Radiology,Contract-bond,5000.80

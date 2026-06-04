@@ -1,0 +1,11 @@
+﻿medicine_id,medicine_name,medicine_price,medicine_vendor,medicine_stock,nur_id
+M001,Amoxicillin/Clavulanate,45.50,PharmaCorp,100,N001
+M002,Fluticasone Propionate,32.00,MediLink,50,N002
+M003,Epinephrine,85.00,VitalBio,30,N001
+M004,Naloxone (Narcan),120.00,SafetyFirst,20,N003
+M005,Iohexol (Omnipaque),55.00,ScanRay,45,N002
+M006,Gadobenate,70.00,ScanRay,25,N002
+M007,Propofol,150.00,AnesSafe,15,N004
+M008,Cefazolin,28.50,PharmaCorp,80,N001
+M009,Levetiracetam (Keppra),110.00,NeuroCare,40,N003
+M010,Levodopa/Carbidopa,95.00,NeuroCare,35,N003

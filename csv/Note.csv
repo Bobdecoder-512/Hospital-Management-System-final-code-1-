@@ -1,0 +1,2 @@
+﻿Patient_id,note_date,note_time,note_blood,note_temp,note_sym,note_cm,patient_cond
+P0001,12/12/2026,22:00,100,37.5,fever,Epinephrine,Critical
