@@ -290,7 +290,7 @@ int bookApt(char* patientID){
         }
     }
 
-    printf("\nSpeacility:\n");
+    printf("\nSpeciality:\n");
     for(int i = 0; i < speCount; i++){
         printf("%d. %s\n", i+1, specialist[i]);
     }
