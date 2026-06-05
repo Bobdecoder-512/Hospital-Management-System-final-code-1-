@@ -1008,8 +1008,10 @@ void addPay(char* patientID){
             if (writeInvoice(bills, billCount)) {
                 printf("Payment successful! Invoice %s marked as PAID.\n", 
                     selectedBillPtr->bill_id);
+                return;
             } else {
                 printf("Payment failed! Error updating records.\n");
+                return;
             }
         } else {
             printf("Payment cancelled.\n");
