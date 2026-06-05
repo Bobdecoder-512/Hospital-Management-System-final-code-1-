@@ -1099,7 +1099,12 @@ void statusFilter(Bill bills[], int billCount, char* patientID, Category cats[],
             continue;
         }
 
-        if(strcmp(stat, bills[i].payment_method)== 0){
+        if(strcmp(stat, "Unpaid") == 0){
+            printBillRow(&bills[i], dispNum);
+            found = 1;            
+        }
+
+        if(strcmp(stat, "Unpaid") != 0){
             printBillRow(&bills[i], dispNum);
             found = 1;
         }
