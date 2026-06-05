@@ -578,6 +578,7 @@ void viewSearchApt(char* patientID){
 
                         if(validateDate(searchDate)) {
                             searchByDate(appointments, drs, aptCount,drCount, patientID, searchDate);
+                            break;
                         }
                         else {
                             printf("Invalid date format.\n");
@@ -696,7 +697,7 @@ int rescheduleApt(char* patientID){
             strcpy(details->date, aptDate);
             strcpy(details->time, aptTime);
             
-            strcpy(schedules[oldScheIndex].activity, "VACANT");
+            strcpy(details->patientID, patientID);
             strcpy(schedules[scheIndex].activity, "Consultation");
 
             if(!writeAppointment(appointments, aptCount)){

@@ -464,99 +464,135 @@ void calculate_billing(struct bill *b) {
     int choice, qty, days;
     float price;
     int med_types;
-do{
+
     // --- Medicine ---
-    printf("How many medicines? (0-10): ");
-    scanf("%d", &med_types);
-    buffer();
-    if(med_types > 0 && med_types <= 10)
-    {
-    for (int i = 0; i < med_types; i++) {
-        printf("\n=======HOSPITAL MEDICINE INVENTORY======\n");
-        printf("1. Amoxicillin       6. Gadobenate\n");
-        printf("2. Fluticasone       7. Propofol\n");
-        printf("3. Epinephrine       8. Cefazolin\n");
-        printf("4. Naloxone          9. Levetiracetam\n");
-        printf("5. Iohexol          10. Levodopa\n");
-        printf("========================================\n");
-        printf("Select Med #%d (1-10): ", i + 1);
+    do {
+        printf("How many medicines? (0-10): ");
+        scanf("%d", &med_types);
+        buffer();
+        if (med_types > 0 && med_types <= 10) {
+            for (int i = 0; i < med_types; i++) {
+                printf("\n=======HOSPITAL MEDICINE INVENTORY======\n");
+                printf("1. Amoxicillin       6. Gadobenate\n");
+                printf("2. Fluticasone       7. Propofol\n");
+                printf("3. Epinephrine       8. Cefazolin\n");
+                printf("4. Naloxone          9. Levetiracetam\n");
+                printf("5. Iohexol          10. Levodopa\n");
+                printf("========================================\n");
+                printf("Select Med #%d (1-10): ", i + 1);
+                scanf("%d", &choice);
+                buffer();
+
+                if (choice >= 1 && choice <= 10) {
+                    const char *id = medIDMap[choice];
+                    price = get_price("csv/Inventory.csv", id);
+
+                    if (price != -1.0) {
+                        // Added validation loop for quantity
+                        do {
+                            printf("Enter quantity: ");
+                            scanf("%d", &qty);
+                            buffer();
+                            if (qty <= 0) {
+                                printf("Quantity must be greater than 0!\n");
+                            }
+                        } while (qty <= 0);
+
+                        add_item(b, id, qty, price);
+                        printf("Added %s | Subtotal: RM%.2f\n", id, price * qty);
+                    } else {
+                        printf("Medicine not found!\n");
+                        i--;
+                    }
+                } else {
+                    printf("Invalid choice.\n");
+                    i--;
+                }
+            }
+            break;
+        } else if (med_types == 0) {
+            printf("No need for medicine. Skipped to surgery.\n");
+            break;
+        } else {
+            printf("Invalid input. Please enter again!\n");
+        }
+    } while (1);
+
+    // --- Surgery ---
+    do {
+        printf("\n1. General Surgery\n2. Emergency Surgery\n0. Skip\nEnter surgery: ");
         scanf("%d", &choice);
         buffer();
 
-        if (choice >= 1 && choice <= 10) {
-            const char *id = medIDMap[choice];
-            price = get_price("csv/Inventory.csv", id);
-
+        if (choice == 1 || choice == 2) {
+            const char *id = (choice == 1) ? "S001" : "S002";
+            price = get_price("csv/category.csv", id);
             if (price != -1.0) {
-                printf("Enter quantity: ");
-                scanf("%d", &qty);
-                buffer();
-                add_item(b, id, qty, price);
-                printf("Added %s | Subtotal: RM%.2f\n", id, price * qty);
-            } else {
-                printf("Medicine not found!\n");
-                i--;
+                add_item(b, id, 1, price);
+                printf("Surgery added: RM%.2f\n", price);
             }
-          
+            break; // Valid input, exit loop
+        } else if (choice == 0) {
+            printf("No surgery added. Skipping to room selection.\n");
+            break; // Valid choice (skip), exit loop
         } else {
-            printf("Invalid choice.\n");
-            i--;
+            printf("Invalid choice. Please enter again!\n");
         }
-    }  break;
-}else if(med_types == 0)
-{
-    printf("No need for nedicine.Skipped to surgery.\n");
-    break;
-}
-else
-{
-    printf("Invalid input. Please enter again!\n");
-}
-}while(1);
-
-    // --- Surgery ---
-    printf("\n1. General Surgery\n2. Emergency Surgery\n0. Skip\nEnter surgery: ");
-    scanf("%d", &choice);
-    buffer();
-
-    if (choice == 1 || choice == 2) {
-        const char *id = (choice == 1) ? "S001" : "S002";
-        price = get_price("csv/category.csv", id);
-        if (price != -1.0) {
-            add_item(b, id, 1, price);
-            printf("Surgery added: RM%.2f\n", price);
-        }
-    }
+    } while (1);
 
     // --- Room ---
-    printf("\n1. Normal Ward\n2. VIP\n3. ICU\n0. Skip\nEnter room: ");
-    scanf("%d", &choice);
-    buffer();
-
-    if (choice >= 1 && choice <= 3) {
-        const char *id = (choice == 1) ? "R001" : (choice == 2) ? "R002" : "R003";
-        printf("Enter number of days: ");
-        scanf("%d", &days);
+    do {
+        printf("\n1. Normal Ward\n2. VIP\n3. ICU\n0. Skip\nEnter room: ");
+        scanf("%d", &choice);
         buffer();
-        price = get_price("csv/category.csv", id);
-        if (price != -1.0) {
-            add_item(b, id, days, price);
-            printf("Room added: RM%.2f\n", price * days);
+
+        if (choice >= 1 && choice <= 3) {
+            const char *id = (choice == 1) ? "R001" : (choice == 2) ? "R002" : "R003";
+            
+            // Added validation loop for days
+            do {
+                printf("Enter number of days: ");
+                scanf("%d", &days);
+                buffer();
+                if (days <= 0) {
+                    printf("Days must be greater than 0!\n");
+                }
+            } while (days <= 0);
+
+            price = get_price("csv/category.csv", id);
+            if (price != -1.0) {
+                add_item(b, id, days, price);
+                printf("Room added: RM%.2f\n", price * days);
+            }
+            break; // Valid input, exit loop
+        } else if (choice == 0) {
+            printf("No room added. Skipping to consultation.\n");
+            break; // Valid choice (skip), exit loop
+        } else {
+            printf("Invalid choice. Please enter again!\n");
         }
-    }
+    } while (1);
 
     // --- Consultation ---
-    printf("\nConsultation? (0: skip, 1: yes): ");
-    scanf("%d", &choice);
-    buffer();
+    do {
+        printf("\nConsultation? (0: skip, 1: yes): ");
+        scanf("%d", &choice);
+        buffer();
 
-    if (choice == 1) {
-        price = get_price("csv/category.csv", "C001");
-        if (price != -1.0) {
-            add_item(b, "C001", 1, price);
-            printf("Consultation added: RM%.2f\n", price);
+        if (choice == 1) {
+            price = get_price("csv/category.csv", "C001");
+            if (price != -1.0) {
+                add_item(b, "C001", 1, price);
+                printf("Consultation added: RM%.2f\n", price);
+            }
+            break; // Valid input, exit loop
+        } else if (choice == 0) {
+            printf("No consultation added. Finalizing bill.\n");
+            break; // Valid choice (skip), exit loop
+        } else {
+            printf("Invalid choice. Please enter again!\n");
         }
-    }
+    } while (1);
 }
 
 void CreateBillRecord(struct bill *b)
@@ -621,25 +657,26 @@ void CreateBillRecord(struct bill *b)
     calculate_billing(b);
     
     printf("Enter bill date (DD/MM/YYYY): ");
-    while (1) {
-        scanf("%10s", b->bill_date);
+while (1) {
+    scanf("%10s", b->bill_date);
+    buffer(); // <-- Added this to clear the newline character so the loop won't run twice
 
-        if (strlen(b->bill_date) != 10 || b->bill_date[2] != '/' || b->bill_date[5] != '/') {
-            printf("Invalid format! Please enter in DD/MM/YYYY format: ");
-            continue;
-        }
+    if (strlen(b->bill_date) != 10 || b->bill_date[2] != '/' || b->bill_date[5] != '/') {
+        printf("Invalid format! Please enter in DD/MM/YYYY format: ");
+        continue;
+    }
 
-        int day   = (b->bill_date[0] - '0') * 10 + (b->bill_date[1] - '0');
-        int month = (b->bill_date[3] - '0') * 10 + (b->bill_date[4] - '0');
-        int year  = (b->bill_date[6] - '0') * 1000 +
-                    (b->bill_date[7] - '0') * 100 +
-                    (b->bill_date[8] - '0') * 10 +
-                    (b->bill_date[9] - '0');
+    int day   = (b->bill_date[0] - '0') * 10 + (b->bill_date[1] - '0');
+    int month = (b->bill_date[3] - '0') * 10 + (b->bill_date[4] - '0');
+    int year  = (b->bill_date[6] - '0') * 1000 +
+                (b->bill_date[7] - '0') * 100 +
+                (b->bill_date[8] - '0') * 10 +
+                (b->bill_date[9] - '0');
 
-        if (day < 1 || day > 31 || month < 1 || month > 12) {
-            printf("Invalid date! Please enter a valid date in DD/MM/YYYY format: ");
-            continue;
-        }
+    if (day < 1 || day > 31 || month < 1 || month > 12) {
+        printf("Invalid date! Please enter a valid date in DD/MM/YYYY format: ");
+        continue;
+    }
         break;
     };
         
