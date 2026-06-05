@@ -259,12 +259,12 @@ void create_admin_account(admin *ptr_new_admin)
     do
     {
         printf("Admin Name: ");
-        fgets(ptr_new_admin->admin_name, sizeof(ptr_new_admin->admin_name), stdin);
+        fgets(ptr_new_admin->admin_name, sizeof(ptr_new_admin->admin_name), stdin);//get admin name
         ptr_new_admin->admin_name[strcspn(ptr_new_admin->admin_name, "\n")] = 0; //remove new line "\n"
 
         if (!check_name(ptr_new_admin->admin_name))
         {
-            printf("ERROR: 'INVALID INPUT' PLEASE ENTER AGAIN\n");
+            printf("ERROR: 'INVALID INPUT' PLEASE ENTER AGAIN\n");//display error while invalid input
         }
         
     } while (!check_name(ptr_new_admin->admin_name));
@@ -363,7 +363,8 @@ void create_admin_account(admin *ptr_new_admin)
     if(create_admin_file != NULL)
     {
         //append value
-        fprintf(create_admin_file, "%s,%s,%s,%s,%s,%s\n", ptr_new_admin->admin_id,ptr_new_admin->admin_name,ptr_new_admin->admin_contact,ptr_new_admin->admin_duty,ptr_new_admin->admin_employment,ptr_new_admin->admin_salary);
+        fprintf(create_admin_file, "%s,%s,%s,%s,%s,%s\n", 
+            ptr_new_admin->admin_id,ptr_new_admin->admin_name,ptr_new_admin->admin_contact,ptr_new_admin->admin_duty,ptr_new_admin->admin_employment,ptr_new_admin->admin_salary);
         printf("CREATE SUCCESSFUL ^_^\n");
     }
 
@@ -433,7 +434,7 @@ void select_staff_type()
 
 
 
-//function for search staff account 现在要改这个part变成找employment， 然后要用pointer去point file name
+//function for search staff account
 void search_staff_account(int open_file_type)
 {
     fileline search_staff;
@@ -678,26 +679,35 @@ void financial_sales_generator()
 {
     fileline unpaid_sales;
     fileline paid_sales;
-    char search_report_month[5];
-    char get_search_report_month[5];
+    char search_report_year[5];
+    char get_search_report_year[5];
     float total_unpaid_amount = 0;
     float total_paid_amount = 0;
     int generate_sales_report;
+    int length_of_input;
     
     do
     {
-        printf("Enter report month: ");
-        fgets(get_search_report_month, sizeof(get_search_report_month), stdin);
-        get_search_report_month[strcspn(get_search_report_month, "\n")] = 0;
-    } while (!check_isdigit(get_search_report_month));
-    sprintf(search_report_month, "%s", get_search_report_month);
+        printf("Enter report year: ");
+        fgets(get_search_report_year, sizeof(get_search_report_year), stdin);
+        get_search_report_year[strcspn(get_search_report_year, "\n")] = 0;
+
+        if (strlen(get_search_report_year) == 4)
+        {
+            length_of_input = 1;
+        } else {
+            length_of_input = 0;
+        }
+
+    } while (!check_isdigit(get_search_report_year) || length_of_input == 0);
+    sprintf(search_report_year, "%s", get_search_report_year);
     
     FILE *unpaid_report = fopen("csv/Bill_Payment.csv", "r");
 
     if(!unpaid_report){printf("ERROR: 'FILE NOT FOUND\n");}
 
     printf("\n");
-    printf("========MONTHLY SALES REPORT========\n");
+    printf("========YEARLY SALES REPORT========\n");
     printf("\n");
     
     fgets(unpaid_sales.line, sizeof(unpaid_sales.line), unpaid_report);//read first line but skip it
@@ -742,16 +752,16 @@ void financial_sales_generator()
             }
         }
 
-        //select month from date
+        //select year from date
         int day = 0, month = 0, year = 0;
-        char unpaid_month[5] = "";
+        char unpaid_year[7] = "";
         if(unpaid_bill_date != NULL)
         {
             sscanf(unpaid_bill_date, "%d/%d/%d", &day, &month, &year);
-            sprintf(unpaid_month, "%d", month);
+            sprintf(unpaid_year, "%d", year);
         }
 
-        if (search_report_month != NULL && strcmp(unpaid_month, search_report_month) == 0 && strcmp(unpaid_status, "Unpaid") == 0)
+        if (search_report_year != NULL && strcmp(unpaid_year, search_report_year) == 0 && strcmp(unpaid_status, "Unpaid") == 0)
         {
             printf("%-8s | %-10s | %-2d/%-2d/%-4d | %-15s\n", unpaid_bill_id, unpaid_patient_id, day, month, year, unpaid_amount);
             total_unpaid_amount += atof(unpaid_amount);
@@ -810,14 +820,14 @@ void financial_sales_generator()
 
         //select month from date
         int p_day = 0, p_month = 0, p_year = 0;
-        char paid_month[5] = "";
+        char paid_year[5] = "";
         if(paid_bill_date != NULL)
         {
             sscanf(paid_bill_date, "%d/%d/%d", &p_day, &p_month, &p_year);
-            sprintf(paid_month, "%d", p_month);
+            sprintf(paid_year, "%d", p_year);
         }
 
-        if (search_report_month != NULL && strcmp(paid_month, search_report_month) == 0 && strcmp(paid_status, "Unpaid") != 0)
+        if (search_report_year != NULL && strcmp(paid_year, search_report_year) == 0 && strcmp(paid_status, "Unpaid") != 0)
         {
             printf("%-8s | %-10s | %-2d/%-2d/%-4d | %-15s\n", paid_bill_id, paid_patient_id, p_day, p_month, p_year, paid_amount);
             total_paid_amount += atof(paid_amount);
@@ -832,7 +842,7 @@ void financial_sales_generator()
             "Total PAID amount: RM%.2f\n", total_unpaid_amount, total_paid_amount);
 
     printf("\n");
-    if(generate_sales_report != 1){printf("ERROR: 'THIS MONTH NO SALES'\n\n");}
+    if(generate_sales_report != 1){printf("ERROR: 'THIS YEAR NO SALES'\n\n");}
 
     fclose(paid_report);
     return;

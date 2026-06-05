@@ -1205,9 +1205,15 @@ void addCmplnt(char *patientID){
     strcpy(complaint.patientID, patientID);
     strcpy(complaint.date, cDate);
     strcpy(complaint.time, cTime);
-    strcpy(complaint.details, userComplaint);
+    strncpy(complaint.details, userComplaint, MAX_INPUT-1);
+    complaint.details[MAX_INPUT - 1] = '\0';
 
-    appendComplaint(complaint);
+    if(appendComplaint(complaint)){
+        printf("Complaint added succesfully..\n");
+        return;
+    } else{
+        printf("Complaint cannot be added!\n");
+    }
 }
 
 void complaintDisp(Patient patient[], Complaint complaints, int patientCount){
