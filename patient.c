@@ -805,15 +805,15 @@ void getMedicine(char* typeID, Inventory* invs, int count, char* type, float* pr
 int billMatch(Bill *bills, int billCount, char *patientID, int userChoice){
     int num = 1;
     for(int i = 0; i < billCount; i++){
-        if (strcmp(patientID, bills[i].patient_id)){
+        if (strcmp(patientID, bills[i].patient_id) == 1){
             continue;
         }
 
-        if(strcmp(bills[i].payment_method, "Unpaid") != 0){
+        if(strcmp(bills[i].payment_method, "Unpaid") == 1){
             continue;
         }
 
-        if(num ==  userChoice){
+        if(num == userChoice){
             return i;
         }
 
@@ -975,7 +975,7 @@ void addPay(char* patientID){
 
         Bill *selectedBillPtr = &bills[billIndex];
 
-        billDetails(patientID, selectedBillPtr->bill_id, bills, billCount, cats, catCount, invent, inventCount);
+        billDetails(patientID, selectedBillPtr->bill_id, &bills[billIndex], billCount, cats, catCount, invent, inventCount);
 
         char confirm;
         printf("\nConfirm payment? (y/n): ");

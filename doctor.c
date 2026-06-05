@@ -221,7 +221,10 @@ void view_sch()
                 strcpy(tempDate, s.date);
                 printf("\n%s:\n", s.date);
             }
-            printf("%s - %s", s.time, s.activity);     
+            if (strcmp(s.activity, "VACANT") != 1)
+            {
+                printf("%s - %s", s.time, s.activity);
+            }     
 
             found = 1;
         }

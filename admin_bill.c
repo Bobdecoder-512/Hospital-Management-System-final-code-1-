@@ -590,7 +590,7 @@ void CreateBillRecord(struct bill *b)
 
     if (!validatePrefixedID(b->patient_id, 'P')) {
           printf("Invalid Patient ID format! Must be P followed by 4 digits.\n");
-    } else if (!idcheck("../file/Patient.csv", b->patient_id, 0)) {
+    } else if (!idcheck("csv/Patient.csv", b->patient_id, 0)) {
           printf("Patient ID not found in patient.csv! Please enter a valid ID.\n");
     } else {
           printf("Patient ID found! Proceeding...\n");

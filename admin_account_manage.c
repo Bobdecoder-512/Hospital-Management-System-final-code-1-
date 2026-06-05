@@ -395,7 +395,7 @@ do {
     printf("Enter Salary: ");
     scanf("%f", &f->dr_salary);
 
-    FILE *fptr = fopen("../file/staff/Dr.csv", "a"); //file position
+    FILE *fptr = fopen("csv/Dr.csv", "a"); //file position
     if (fptr == NULL) 
     {
         printf("Error opening file!\n");
@@ -754,7 +754,7 @@ void modifyDoctor() {
     scanf("%s", targetID);
     buffer();
     
-    remove("../file/staff/Dr_temp.csv");
+    remove("csv/Dr_temp.csv");
 
     FILE *file = fopen("csv/Dr.csv", "r");
     FILE *temp = fopen("csv/Dr_temp.csv", "w");
@@ -986,7 +986,7 @@ void modifyNurse() {
     scanf("%s", targetID);
     buffer();
 
-    remove("../file/staff/Nurse_temp.csv");
+    remove("csv/Nurse_temp.csv");
 
     FILE *file = fopen("csv/Nurse.csv", "r");
     FILE *temp = fopen("csv/Nurse_temp.csv", "w");
